@@ -9,7 +9,7 @@ int main()
 	cout << "Podaj imie: ";
 	cin >> imie;
 	cin.ignore();
-	cout << "Witaj " << imie << endl;
+	cout << "Witaj szefie" << imie << endl;
 	cout << "Gratulacje. To Twoj pierwszy program!" << endl;
 	cout << "Nacisnij ENTER aby zakonczyc" << endl;
 	getchar();
