@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
+#include <iomanip>
 
 // Struktura przechowująca dane o przeciwnikach
 struct Enemy {
@@ -25,14 +26,17 @@ private:
     sf::Text infoText;
     sf::Text helpText;
     sf::Text menuText;
+    sf::Text countdownText;
 
     bool isPaused = false;
     bool showHelp = false;
+    bool levelTransition = false;
+
     int score = 0;
     int level = 1;
-
     sf::Clock levelClock;
-    const sf::Time levelDuration = sf::seconds(30.0f);
+    sf::Clock transitionClock;
+    float levelDuration = 30.0f; // Każdy poziom trwa 30 sekund
 
     void initWindow() {
         window.create(sf::VideoMode(800, 600), "Space Invaders", sf::Style::Close);
@@ -65,6 +69,11 @@ private:
         menuText.setFillColor(sf::Color::Yellow);
         menuText.setString("Are you sure you want to exit? Y/N");
         menuText.setPosition(200.0f, 300.0f);
+
+        countdownText.setFont(font);
+        countdownText.setCharacterSize(48);
+        countdownText.setFillColor(sf::Color::White);
+        countdownText.setPosition(300.0f, 250.0f);
     }
 
     void spawnEnemy() {
@@ -72,7 +81,7 @@ private:
         enemy.shape.setRadius(20.0f);
         enemy.shape.setFillColor(sf::Color::Red);
         enemy.shape.setPosition(static_cast<float>(rand() % 750), -20.0f);
-        enemy.velocity = sf::Vector2f(0.0f, 1.0f + level * 0.5f);
+        enemy.velocity = sf::Vector2f(0.0f, 1.0f + level * 0.2f);
         enemies.push_back(enemy);
     }
 
@@ -118,7 +127,7 @@ private:
                 enemy.shape.setRadius(20.0f);
                 enemy.shape.setFillColor(sf::Color::Red);
                 enemy.shape.setPosition(x, y);
-                enemy.velocity = sf::Vector2f(0.0f, 1.0f + level * 0.5f);
+                enemy.velocity = sf::Vector2f(0.0f, 1.0f + level * 0.2f);
                 enemies.push_back(enemy);
             }
             file.close();
@@ -140,11 +149,16 @@ private:
         }
     }
 
-    void updateLevel() {
-        if (levelClock.getElapsedTime() >= levelDuration) {
-            levelClock.restart();
-            level++;
-            score++;
+    void handleLevelTransition() {
+        if (levelTransition) {
+            int remainingTime = 5 - static_cast<int>(transitionClock.getElapsedTime().asSeconds());
+            if (remainingTime > 0) {
+                countdownText.setString("Next level in: " + std::to_string(remainingTime));
+            }
+            else {
+                levelTransition = false;
+                levelClock.restart();
+            }
         }
     }
 
@@ -156,6 +170,9 @@ private:
         }
         else if (showHelp) {
             window.draw(helpText);
+        }
+        else if (levelTransition) {
+            window.draw(countdownText);
         }
         else {
             window.draw(player);
@@ -180,7 +197,6 @@ public:
     void run() {
         sf::Clock spawnClock;
         sf::Time spawnTimer = sf::seconds(1.0f);
-        levelClock.restart();
 
         while (window.isOpen()) {
             sf::Event event;
@@ -209,14 +225,26 @@ public:
             if (!isPaused && !showHelp) {
                 handleInput();
 
-                if (spawnClock.getElapsedTime() > spawnTimer) {
-                    spawnEnemy();
-                    spawnClock.restart();
-                }
+                if (!levelTransition) {
+                    if (spawnClock.getElapsedTime() > spawnTimer) {
+                        spawnEnemy();
+                        spawnClock.restart();
+                    }
 
-                updateEnemies();
-                checkCollisions();
-                updateLevel();
+                    updateEnemies();
+                    checkCollisions();
+
+                    if (levelClock.getElapsedTime().asSeconds() > levelDuration) {
+                        level++;
+                        score++;
+                        levelTransition = true;
+                        transitionClock.restart();
+                        enemies.clear();
+                    }
+                }
+                else {
+                    handleLevelTransition();
+                }
             }
 
             render();
@@ -236,3 +264,4 @@ int main() {
 
     return 0;
 }
+
