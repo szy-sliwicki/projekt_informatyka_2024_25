@@ -13,6 +13,7 @@ int main()
 	cout << "Gratulacje. To Twoj pierwszy program!" << endl;
 	cout << "Nacisnij ENTER aby zakonczyc" << endl;
 	cout << "====" << endl;
+	cout << "!!!!" << endl;
 	getchar();
 	return 0;
 }
