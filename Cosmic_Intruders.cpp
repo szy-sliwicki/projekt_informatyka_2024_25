@@ -67,14 +67,14 @@ private:
     float enemySpawnInterval = 1.0f;
     int maxEnemiesOnScreen = 50;
     float enemySpeed = 1.0f;
-    float bulletSpeed = 7.0f;
+    float bulletSpeed = 7.5f;
 
     sf::Clock levelClock;
     sf::Clock transitionClock;
     sf::Clock bulletClock;
     sf::Clock levelCompleteClock;
     float levelDuration = 20.0f;
-    float bulletCooldown = 0.5f;
+    float bulletCooldown = 0.55f;
 
     void centerText(sf::Text& text, float yPosition) {
         sf::FloatRect bounds = text.getGlobalBounds();
@@ -127,7 +127,7 @@ private:
         centerText(titleText, 80.0f);
 
         startText.setFont(font);
-        startText.setString("Nacisnij ENTER aby rozpoczac\nNacisnij L aby wczytac zapisana gre");
+        startText.setString("\nNacisnij ENTER aby rozpoczac\nNacisnij L aby wczytac zapisana gre");
         startText.setCharacterSize(24);
         startText.setFillColor(sf::Color(255, 255, 255, 220));
         startText.setOutlineThickness(1);
@@ -135,7 +135,7 @@ private:
         centerText(startText, 200.0f);
 
         authorText.setFont(font);
-        authorText.setString("Sterowanie:\nStrzalki - ruch\nSpacja - strzal\nS - zapis gry\nF1 - pomoc\nM - powrot do menu");
+        authorText.setString("\nSterowanie:\nStrzalki - ruch\nSpacja - strzal\nS - zapis gry\nF1 - pomoc\nM - powrot do menu");
         authorText.setCharacterSize(22);
         authorText.setFillColor(sf::Color(255, 255, 0, 220));
         authorText.setOutlineThickness(1);
@@ -174,7 +174,7 @@ private:
             "- Zbieraj punkty za trafienie przeciwnikow\n\n"
             "Nacisnij F1, aby wrocic do gry"
         );
-        centerText(helpText, 100.0f);
+        centerText(helpText, 70.0f);
 
         menuText.setFont(font);
         menuText.setCharacterSize(28);
@@ -344,11 +344,8 @@ private:
             );
             enemies[i].sprite.setColor(enemyColor);
 
+            enemies[i].sprite.setRotation(sin(time * 2.0f + i * 0.3f) * 15.0f);
 
-
-
-            float scale = 0.05f + sin(time * 4.0f + i * 0.7f) * 0.01f;
-            enemies[i].sprite.setScale(scale, scale);
 
             if (enemies[i].sprite.getPosition().x <= 0 ||
                 enemies[i].sprite.getPosition().x >= 780) {
@@ -383,9 +380,7 @@ private:
         if (!isLevelComplete) {
             levelTimerText.setString("Czas: " + std::to_string(static_cast<int>(timeLeft)) + "s");
             levelTimerText.setPosition(
-                window.getSize().x - levelTimerText.getGlobalBounds().width - 20.0f,
-                10.0f
-            );
+                window.getSize().x - levelTimerText.getGlobalBounds().width - 20.0f, 10.0f);
 
             if (timeLeft <= 0) {
                 isLevelComplete = true;
@@ -420,7 +415,7 @@ private:
             player.move(-5.0f, 0.0f);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
-            player.getPosition().x < 750) {
+            player.getPosition().x < 700) {
             player.move(5.0f, 0.0f);
         }
 
