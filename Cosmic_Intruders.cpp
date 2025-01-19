@@ -1,7 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -10,27 +9,25 @@
 #include <memory>
 #include <iomanip>
 #include <cstdlib>
+#include <cmath>
 
-// Struktura pocisku
 struct Bullet {
     sf::RectangleShape shape;
     float speed;
 };
 
-// Struktura przeciwnika
 struct Enemy {
     sf::Sprite sprite;
     sf::Vector2f velocity;
     int health;
+    float colorTimer;
 };
 
-// Struktura wybuchu
 struct Explosion {
     sf::Sprite sprite;
     sf::Clock clock;
 };
 
-// Klasa gry
 class CosmicIntruders {
 private:
     sf::RenderWindow window;
@@ -48,12 +45,10 @@ private:
     sf::Text infoText;
     sf::Text helpText;
     sf::Text menuText;
-    sf::Text countdownText;
     sf::Text levelTimerText;
     sf::Text levelText;
-    sf::RectangleShape helpBackground;
+    sf::Clock animationClock;
 
-    // Ekran startowy
     bool showStartScreen = true;
     sf::Text titleText;
     sf::Text startText;
@@ -90,7 +85,7 @@ private:
     }
 
     void initWindow() {
-        window.create(sf::VideoMode(800, 600), "Space Invaders", sf::Style::Close);
+        window.create(sf::VideoMode(800, 600), "Cosmic Intruders", sf::Style::Close);
         window.setFramerateLimit(60);
     }
 
@@ -104,7 +99,9 @@ private:
     }
 
     void initEnemies() {
-        if (!enemyTexture1.loadFromFile("ENEMY_1.png") || !enemyTexture2.loadFromFile("ENEMY_2.png") || !explosionTexture.loadFromFile("EXPLOSION.png")) {
+        if (!enemyTexture1.loadFromFile("ENEMY_1.png") ||
+            !enemyTexture2.loadFromFile("ENEMY_2.png") ||
+            !explosionTexture.loadFromFile("EXPLOSION.png")) {
             throw std::runtime_error("Could not load enemy or explosion textures.");
         }
     }
@@ -123,21 +120,27 @@ private:
     void initStartScreen() {
         titleText.setFont(font);
         titleText.setString("COSMIC INTRUDERS");
-        titleText.setCharacterSize(80);
-        titleText.setFillColor(sf::Color::Green);
-        centerText(titleText, 100.0f);
+        titleText.setCharacterSize(60);
+        titleText.setFillColor(sf::Color(0, 255, 0, 230));
+        titleText.setOutlineThickness(2);
+        titleText.setOutlineColor(sf::Color::White);
+        centerText(titleText, 80.0f);
 
         startText.setFont(font);
         startText.setString("Nacisnij ENTER aby rozpoczac\nNacisnij L aby wczytac zapisana gre");
-        startText.setCharacterSize(30);
-        startText.setFillColor(sf::Color::White);
-        centerText(startText, 300.0f);
+        startText.setCharacterSize(24);
+        startText.setFillColor(sf::Color(255, 255, 255, 220));
+        startText.setOutlineThickness(1);
+        startText.setOutlineColor(sf::Color::Green);
+        centerText(startText, 200.0f);
 
         authorText.setFont(font);
         authorText.setString("Sterowanie:\nStrzalki - ruch\nSpacja - strzal\nS - zapis gry\nF1 - pomoc\nM - powrot do menu");
-        authorText.setCharacterSize(28);
-        authorText.setFillColor(sf::Color::Yellow);
-        centerText(authorText, 400.0f);
+        authorText.setCharacterSize(22);
+        authorText.setFillColor(sf::Color(255, 255, 0, 220));
+        authorText.setOutlineThickness(1);
+        authorText.setOutlineColor(sf::Color(100, 100, 0));
+        centerText(authorText, 300.0f);
     }
 
     void initFont() {
@@ -146,12 +149,16 @@ private:
         }
 
         infoText.setFont(font);
-        infoText.setCharacterSize(30);
+        infoText.setCharacterSize(28);
         infoText.setFillColor(sf::Color::White);
+        infoText.setOutlineThickness(1);
+        infoText.setOutlineColor(sf::Color::Blue);
 
         helpText.setFont(font);
-        helpText.setCharacterSize(28);
+        helpText.setCharacterSize(24);
         helpText.setFillColor(sf::Color::White);
+        helpText.setOutlineThickness(1);
+        helpText.setOutlineColor(sf::Color::Blue);
         helpText.setString(
             "=== COSMIC INTRUDERS - POMOC ===\n\n"
             "Sterowanie:\n"
@@ -159,6 +166,7 @@ private:
             "- Spacja - strzal\n"
             "- S - zapisz gre\n"
             "- F1 - pokazuje/ukrywa pomoc\n"
+            "- M - powrot do menu\n"
             "- ESC - pauza/wyjscie\n\n"
             "Poziomy:\n"
             "- Kazdy poziom trwa 20 sekund\n"
@@ -166,36 +174,43 @@ private:
             "- Zbieraj punkty za trafienie przeciwnikow\n\n"
             "Nacisnij F1, aby wrocic do gry"
         );
-        centerText(helpText, 50.0f);
-
-        helpBackground.setSize(sf::Vector2f(800.0f, 600.0f));
-        helpBackground.setFillColor(sf::Color(0, 0, 50, 230));
+        centerText(helpText, 100.0f);
 
         menuText.setFont(font);
-        menuText.setCharacterSize(30);
+        menuText.setCharacterSize(28);
         menuText.setFillColor(sf::Color::Yellow);
+        menuText.setOutlineThickness(2);
+        menuText.setOutlineColor(sf::Color(100, 100, 0));
         menuText.setString("Czy na pewno chcesz wyjsc? (T/N)");
-        centerText(menuText, 300.0f);
+        centerText(menuText, 250.0f);
 
         levelCompleteText.setFont(font);
-        levelCompleteText.setCharacterSize(48);
+        levelCompleteText.setCharacterSize(40);
         levelCompleteText.setFillColor(sf::Color::Green);
+        levelCompleteText.setOutlineThickness(2);
+        levelCompleteText.setOutlineColor(sf::Color::White);
         levelCompleteText.setString("");
-        centerText(levelCompleteText, 250.0f);
+        centerText(levelCompleteText, 200.0f);
 
         nextLevelText.setFont(font);
-        nextLevelText.setCharacterSize(36);
+        nextLevelText.setCharacterSize(32);
         nextLevelText.setFillColor(sf::Color::Yellow);
-        centerText(nextLevelText, 350.0f);
+        nextLevelText.setOutlineThickness(2);
+        nextLevelText.setOutlineColor(sf::Color(100, 100, 0));
+        centerText(nextLevelText, 300.0f);
 
         levelTimerText.setFont(font);
-        levelTimerText.setCharacterSize(30);
+        levelTimerText.setCharacterSize(24);
         levelTimerText.setFillColor(sf::Color::White);
+        levelTimerText.setOutlineThickness(1);
+        levelTimerText.setOutlineColor(sf::Color::Blue);
         levelTimerText.setPosition(600.0f, 10.0f);
 
         levelText.setFont(font);
-        levelText.setCharacterSize(30);
+        levelText.setCharacterSize(24);
         levelText.setFillColor(sf::Color::White);
+        levelText.setOutlineThickness(1);
+        levelText.setOutlineColor(sf::Color::Blue);
         levelText.setPosition(10.0f, 10.0f);
     }
 
@@ -217,8 +232,10 @@ private:
             sf::Text saveText;
             saveText.setFont(font);
             saveText.setString("Gra zostala zapisana!");
-            saveText.setCharacterSize(24);
+            saveText.setCharacterSize(28);
             saveText.setFillColor(sf::Color::Green);
+            saveText.setOutlineThickness(1);
+            saveText.setOutlineColor(sf::Color::White);
             centerText(saveText, 200.0f);
 
             window.draw(saveText);
@@ -248,6 +265,7 @@ private:
                 enemy.sprite.setPosition(ex, ey);
                 enemy.velocity = sf::Vector2f(vx, vy);
                 enemy.health = h;
+                enemy.colorTimer = static_cast<float>(rand()) / RAND_MAX * 6.28f;
                 enemies.push_back(enemy);
             }
             file.close();
@@ -307,12 +325,30 @@ private:
             enemySpeed + level * 0.2f
         );
         enemy.health = 1 + level / 3;
+        enemy.colorTimer = static_cast<float>(rand()) / RAND_MAX * 6.28f;
         enemies.push_back(enemy);
     }
 
     void updateEnemies() {
+        float time = animationClock.getElapsedTime().asSeconds();
+
         for (size_t i = 0; i < enemies.size(); i++) {
             enemies[i].sprite.move(enemies[i].velocity);
+
+
+            float colorValue = (sin(time * 3.0f + i * 0.5f) + 1.0f) * 0.5f;
+            sf::Color enemyColor(
+                255,
+                static_cast<sf::Uint8>(128 + colorValue * 127),
+                static_cast<sf::Uint8>(128 + colorValue * 127)
+            );
+            enemies[i].sprite.setColor(enemyColor);
+
+
+
+
+            float scale = 0.05f + sin(time * 4.0f + i * 0.7f) * 0.01f;
+            enemies[i].sprite.setScale(scale, scale);
 
             if (enemies[i].sprite.getPosition().x <= 0 ||
                 enemies[i].sprite.getPosition().x >= 780) {
@@ -435,7 +471,6 @@ private:
             }
         }
         else if (showHelp) {
-            window.draw(helpBackground);
             window.draw(helpText);
         }
         else if (isLevelComplete) {
@@ -477,6 +512,7 @@ public:
         initFont();
         initStartScreen();
         srand(static_cast<unsigned>(time(nullptr)));
+        animationClock.restart();
     }
 
     void restartGame() {
