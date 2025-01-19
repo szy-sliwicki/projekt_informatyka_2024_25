@@ -64,9 +64,9 @@ private:
 
     int score = 0;
     int level = 1;
-    float enemySpawnInterval = 1.0f;
+    float enemySpawnInterval = 0.75f;
     int maxEnemiesOnScreen = 50;
-    float enemySpeed = 1.0f;
+    float enemySpeed = 1.5f;
     float bulletSpeed = 7.5f;
 
     sf::Clock levelClock;
@@ -236,7 +236,7 @@ private:
             saveText.setFillColor(sf::Color::Green);
             saveText.setOutlineThickness(1);
             saveText.setOutlineColor(sf::Color::White);
-            centerText(saveText, 200.0f);
+            centerText(saveText, 260.0f);
 
             window.draw(saveText);
             window.display();
@@ -369,7 +369,7 @@ private:
                     "Koniec gry! Punkty: " + std::to_string(score) +
                     "\nChcesz zagrac ponownie? (T/N)"
                 );
-                centerText(infoText, 300.0f);
+                centerText(infoText, 250.0f);
             }
         }
     }
@@ -386,7 +386,7 @@ private:
                 isLevelComplete = true;
                 levelCompleteClock.restart();
                 levelCompleteText.setString("POZIOM " + std::to_string(level) + " UKONCZONY!");
-                centerText(levelCompleteText, 250.0f);
+                centerText(levelCompleteText, 220.0f);
                 enemies.clear();
                 bullets.clear();
             }
@@ -396,7 +396,7 @@ private:
 
             if (transitionTimeLeft > 0) {
                 nextLevelText.setString("Nastepny poziom za: " + std::to_string(static_cast<int>(transitionTimeLeft + 1)));
-                centerText(nextLevelText, 350.0f);
+                centerText(nextLevelText, 320.0f);
             }
             else {
                 isLevelComplete = false;
