@@ -31,7 +31,7 @@ struct Explosion {
 };
 
 // Klasa gry
-class SpaceInvaders {
+class CosmicIntruders {
 private:
     sf::RenderWindow window;
     sf::Sprite player;
@@ -122,7 +122,7 @@ private:
 
     void initStartScreen() {
         titleText.setFont(font);
-        titleText.setString("SPACE INVADERS");
+        titleText.setString("COSMIC INTRUDERS");
         titleText.setCharacterSize(80);
         titleText.setFillColor(sf::Color::Green);
         centerText(titleText, 100.0f);
@@ -153,7 +153,7 @@ private:
         helpText.setCharacterSize(28);
         helpText.setFillColor(sf::Color::White);
         helpText.setString(
-            "=== SPACE INVADERS - POMOC ===\n\n"
+            "=== COSMIC INTRUDERS - POMOC ===\n\n"
             "Sterowanie:\n"
             "- Strzalki lewo/prawo - ruch statku\n"
             "- Spacja - strzal\n"
@@ -469,7 +469,7 @@ private:
     }
 
 public:
-    SpaceInvaders() {
+    CosmicIntruders() {
         initWindow();
         initPlayer();
         initEnemies();
@@ -573,7 +573,7 @@ public:
 
 int main() {
     try {
-        SpaceInvaders game;
+        CosmicIntruders game;
         game.run();
     }
     catch (const std::exception& e) {
