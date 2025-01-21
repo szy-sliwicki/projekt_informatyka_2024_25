@@ -1,9 +1,9 @@
 # Szymon Sliwicki - projekt_informatyka_2024_25 - "Cosmic Intruders" - TEMAT 1
 # G³ówne cechy gry:
-# Cosmic Intruders to dynamiczna gra arcade typu space shooter, w której gracz steruje statkiem kosmicznym i musi eliminowaæ nadlatuj±cych przeciwników. Jest to nowoczesne podej¶cie do klasycznego formatu gier typu "space  # invaders".
+# Cosmic Intruders to dynamiczna gra arcade typu space shooter, w której gracz steruje statkiem kosmicznym i musi eliminowaæ nadlatuj±cych przeciwników. Jest to nowoczesne podej¶cie do klasycznego formatu gier typu "space   invaders".
 # VNajwa¿niejsze elementy mechaniki gry:
-# System poziomów i progresji: Ka¿dy poziom trwa dok³adnie 20 sekund, co tworzy intensywn± rozgrywkê wymagaj±c± szybkich reakcji. Z ka¿dym kolejnym poziomem wzrasta trudno¶æ poprzez zwiêkszenie prêdko¶ci przeciwników i ich # wytrzyma³o¶ci. System punktacji nagradza gracza 10 punktami za ka¿dego zniszczonego przeciwnika.
-# System zapisu i wczytywania: Gra posiada zaawansowany system zapisu stanu rozgrywki, który przechowuje nie tylko wynik i poziom, ale równie¿ dok³adne po³o¿enie wszystkich obiektów na ekranie, w³±cznie z prêdko¶ciami i # # parametrami przeciwników.
+# System poziomów i progresji: Ka¿dy poziom trwa dok³adnie 20 sekund, co tworzy intensywn± rozgrywkê wymagaj±c± szybkich reakcji. Z ka¿dym kolejnym poziomem wzrasta trudno¶æ poprzez zwiêkszenie prêdko¶ci przeciwników i ich  wytrzyma³o¶ci. System punktacji nagradza gracza 10 punktami za ka¿dego zniszczonego przeciwnika.
+# System zapisu i wczytywania: Gra posiada zaawansowany system zapisu stanu rozgrywki, który przechowuje nie tylko wynik i poziom, ale równie¿ dok³adne po³o¿enie wszystkich obiektów na ekranie, w³±cznie z prêdko¶ciami i #  parametrami przeciwników.
 # Najbardziej interesuj±ce funkcje techniczne:
 
 # Zaawansowana animacja przeciwników:
@@ -63,5 +63,5 @@
 # Zbalansowany system progresji trudno¶ci
 # Elastyczny system kolizji
 
-# Podsumowuj±c, Cosmic Intruders to dobrze zaprojektowana gra arcade, która ³±czy klasyczne elementy gatunku z nowoczesnymi rozwi±zaniami technicznymi. Szczególnie imponuj±cy jest system animacji i zarz±dzania stanem gry, # a tak¿e przemy¶lany system progresji trudno¶ci, który zapewnia odpowiednie wyzwanie dla graczy.
+# Podsumowuj±c, Cosmic Intruders to dobrze zaprojektowana gra arcade, która ³±czy klasyczne elementy gatunku z nowoczesnymi rozwi±zaniami technicznymi. Szczególnie imponuj±cy jest system animacji i zarz±dzania stanem gry,  a tak¿e przemy¶lany system progresji trudno¶ci, który zapewnia odpowiednie wyzwanie dla graczy.
 
