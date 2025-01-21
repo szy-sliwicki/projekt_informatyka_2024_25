@@ -4,22 +4,12 @@
 # VNajwa¿niejsze elementy mechaniki gry:
 # System poziomów i progresji: Ka¿dy poziom trwa dok³adnie 20 sekund, co tworzy intensywn± rozgrywkê wymagaj±c± szybkich reakcji. Z ka¿dym kolejnym poziomem wzrasta trudno¶æ poprzez zwiêkszenie prêdko¶ci przeciwników i ich  wytrzyma³o¶ci. System punktacji nagradza gracza 10 punktami za ka¿dego zniszczonego przeciwnika.
 # System zapisu i wczytywania: Gra posiada zaawansowany system zapisu stanu rozgrywki, który przechowuje nie tylko wynik i poziom, ale równie¿ dok³adne po³o¿enie wszystkich obiektów na ekranie, w³±cznie z prêdko¶ciami i #  parametrami przeciwników.
-# Najbardziej interesuj±ce funkcje techniczne:
-
-# Zaawansowana animacja przeciwników:
 
 
-# Dynamiczna zmiana kolorów przeciwników w czasie rzeczywistym
-# P³ynne animacje rotacji wykorzystuj±ce funkcje trygonometryczne
-# System zarz±dzania czasem ¿ycia efektów wybuchów
+# Zaawansowana animacja przeciwników: Dynamiczna zmiana kolorów przeciwników w czasie rzeczywistym P³ynne animacje rotacji wykorzystuj±ce funkcje trygonometryczne System zarz±dzania czasem ¿ycia efektów wybuchów
 
 
-# System kolizji i fizyki:
-
-
-# Precyzyjne wykrywanie kolizji miêdzy pociskami a przeciwnikami
-# Inteligentny system ruchu przeciwników z odbiciami od krawêdzi ekranu
-# Zró¿nicowane wzorce ruchu przeciwników z wykorzystaniem wektorów prêdko¶ci
+# System kolizji i fizyki: Precyzyjne wykrywanie kolizji miêdzy pociskami a przeciwnikami Inteligentny system ruchu przeciwników z odbiciami od krawêdzi ekranu Zró¿nicowane wzorce ruchu przeciwników z wykorzystaniem wektorów prêdko¶ci
 
 
 # Interfejs u¿ytkownika:
